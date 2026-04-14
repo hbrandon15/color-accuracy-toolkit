@@ -38,6 +38,9 @@ RAW Ingest → Patch Extraction → CCM Computation → ΔE2000 Analysis → Gam
 - **Light source:** Two Aputure LS 60x set to 75% intensity and 6500K
 - **Framing:** Chart fills ~60–70% of the frame, shot straight-on, no shadows on patches
 
+![Camera and lighting rig](imgs/bts1.jpg)
+![ColorChecker placement with iPhone reference shot](imgs/bts2.jpg)
+
 ### Sony Alpha 7 IV
 - **Settings:** Manual exposure (1/200 shutter, f/5.6, ISO 200), no in-camera corrections, Picture Profile set to neutral/flat, lossless compressed RAW
 - **Lens:** Sony FE 24-70mm f/2.8 GM II stopped down to f/5.6 for field flatness
