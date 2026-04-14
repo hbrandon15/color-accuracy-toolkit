@@ -12,7 +12,13 @@ sony_img = "./imgs/AKG07755.ARW"
 
 def display_arw_image(file_path):
     with rawpy.imread(file_path) as raw:
-        rgb = raw.postprocess()  # convert sensor data into a standard RGB image
+        rgb = raw.postprocess(
+            output_bps=16, 
+            no_auto_bright=True, 
+            use_camera_wb=True, 
+            gamma=(1,1), # linear - no gamma curve applied
+            output_color=rawpy.ColorSpace.sRGB
+        )  
     plt.imshow(rgb)
     plt.title('Color Chart ARW Image')
     plt.axis('off')
