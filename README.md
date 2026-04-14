@@ -35,10 +35,11 @@ RAW Ingest → Patch Extraction → CCM Computation → ΔE2000 Analysis → Gam
 ## Shoot Setup
 
 - **Location:** Indoors under controlled light
-- **Light source:** Two Aputure studio lights set to 6500K
-- **Camera settings:** Manual exposure, no in-camera corrections, Picture Profile set to neutral/flat, lossless compressed RAW
+- **Light source:** Two Aputure LS 60x set to 75% intensity and 6500K
+- **Camera** Sony Alpha 7 IV, iPhone 13 Pro Max
+- **Camera settings:** Manual exposure (1/200 shutter, f5.6, ISO 200), no in-camera corrections, Picture Profile set to neutral/flat, lossless compressed RAW
 - **Framing:** Chart fills ~60–70% of the frame, shot straight-on, no shadows on patches
-- **Lens:** 35mm f/1.8 stopped down to f/5.6–f/8 for field flatness
+- **Lens:** Sony FE 24-70mm f/2.8 GM II Lens stopped down to f/5.6 for field flatness
 
 ---
 
