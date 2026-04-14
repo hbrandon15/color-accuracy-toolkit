@@ -36,10 +36,15 @@ RAW Ingest → Patch Extraction → CCM Computation → ΔE2000 Analysis → Gam
 
 - **Location:** Indoors under controlled light
 - **Light source:** Two Aputure LS 60x set to 75% intensity and 6500K
-- **Camera** Sony Alpha 7 IV, iPhone 13 Pro Max
-- **Camera settings:** Manual exposure (1/200 shutter, f5.6, ISO 200), no in-camera corrections, Picture Profile set to neutral/flat, lossless compressed RAW
 - **Framing:** Chart fills ~60–70% of the frame, shot straight-on, no shadows on patches
-- **Lens:** Sony FE 24-70mm f/2.8 GM II Lens stopped down to f/5.6 for field flatness
+
+### Sony Alpha 7 IV
+- **Settings:** Manual exposure (1/200 shutter, f/5.6, ISO 200), no in-camera corrections, Picture Profile set to neutral/flat, lossless compressed RAW
+- **Lens:** Sony FE 24-70mm f/2.8 GM II stopped down to f/5.6 for field flatness
+
+### iPhone 13 Pro Max
+- **Settings:** AE lock, no additional corrections, RAW capture
+- **Lens:** Default (main wide camera)
 
 ---
 
@@ -65,6 +70,12 @@ python run_pipeline.py --input your_image.ARW
 - Corrected vs. ground-truth patch color grid
 - CIE xy chromaticity diagram with camera gamut overlaid on sRGB
 - Exportable multi-figure report
+
+---
+
+## License
+
+MIT License © 2026 Brandon J. Hernandez
 
 ---
 
