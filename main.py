@@ -42,11 +42,8 @@ def detect_patches(file_path):
     # detect the color checker
     swatches = ccd.detect_colour_checkers_segmentation(image)
 
-    print(f'Found {len(swatches)} patches')
-    print(swatches)
+    return swatches
 
-
-# detect_patches(sony_img)
 
 def get_reference_rgb(colour_checker):
     """
@@ -80,10 +77,10 @@ def compute_colour_correction_matrix(measured, reference):
 colour_checker = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014']
 
 # print results of colour reference in sRGB:
-print(f"{get_reference_rgb(colour_checker)}")
+# print(f"{get_reference_rgb(colour_checker)}")
 
 
 # we now have both sides of the equation in sRGB (swatches and RGB_reference)
 
-
+swatches = detect_patches(sony_img)
 # display_arw_image(sony_img)
