@@ -10,9 +10,9 @@ sony_img = "./imgs/AKG07755.ARW"
 
 def display_arw_image(file_path):
     """
-    !!NOTE!!: This is intentially using defaults for quick preview. 
+    !!NOTE!!: This is intentially using defaults for quick preview.
 
-    Converting and displaying sensor data into a standard RGB image using rawpy using default settings. 
+    Converting and displaying sensor data into a standard RGB image using rawpy using default settings.
 
     """
     with rawpy.imread(file_path) as raw:
@@ -26,7 +26,7 @@ def display_arw_image(file_path):
 def detect_patches(file_path):
     """
 
-    Convert sensor data and removing auto balancing to get only linear light off the sensor and detect color patches by returning an array of RGB values per patch. 
+    Convert sensor data and removing auto balancing to get only linear light off the sensor and detect color patches by returning an array of RGB values per patch.
 
     """
     with rawpy.imread(file_path) as raw:
@@ -47,7 +47,7 @@ def detect_patches(file_path):
 
 def get_reference_rgb(colour_checker):
     """
-   We need to convert our reference values (xyY -> XYZ -> Linear sRGB) so both sides of the CCM equation live in the same space 
+   We need to convert our reference values (xyY -> XYZ -> Linear sRGB) so both sides of the CCM equation live in the same space
 
     """
 
@@ -60,8 +60,14 @@ def get_reference_rgb(colour_checker):
 
     # converting XYZ -> sRGB
     # since camera data is linear (I explicitly set gamma=(1,1)), reference needs to match the camera data. We will add "apply_cctf_encoding=False" to make it linear.
-    RGB_reference = colour.XYZ_to_sRGB(XYZ_values, apply_cctf_encoding=False)
-    # print(f"Reference values converted to sRGB:\n{RGB_reference}")
+    #RGB_reference = colour.XYZ_to_sRGB(XYZ_values, apply_cctf_encoding=False)
+
+    # corrected chromatic adaptation mismatch. ColorChecker reference is measured under D50 while sRGB is defined under D65
+    RGB_reference = colour.XYZ_to_sRGB(XYZ_values,
+                                       illuminant=np.array([0.3457, 0.3585]),  # D50 whitepoint
+                                       apply_cctf_encoding=False
+)
+
 
     return RGB_reference
 
