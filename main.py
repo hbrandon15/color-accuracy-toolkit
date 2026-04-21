@@ -87,5 +87,12 @@ reference_rgb = get_reference_rgb(colour_checker)
 
 measured = swatches[0]
 colour_correction_matrix = compute_colour_correction_matrix(measured, reference_rgb)
-print(colour_correction_matrix)
+#print(colour_correction_matrix)
+
+print("measured last 6:")
+print(swatches[0][-6:])
+
+print("reference last 6:")
+print(reference_rgb[-6:])
+
 

@@ -42,7 +42,7 @@ RAW Ingest → Patch Extraction → CCM Computation → ΔE2000 Analysis → Gam
 ![ColorChecker placement with iPhone reference shot](imgs/bts2.jpg)
 
 ### Sony Alpha 7 IV
-- **Settings:** Manual exposure (1/200 shutter, f/5.6, ISO 200), no in-camera corrections, Picture Profile set to neutral/flat, lossless compressed RAW
+- **Settings:** Manual exposure (1/200 shutter, f/5.6, ISO 200), no in-camera corrections, Picture Profile set to neutral/flat, White Balance set to Daylight, lossless compressed RAW
 - **Lens:** Sony FE 24-70mm f/2.8 GM II stopped down to f/5.6 for field flatness
 
 ### iPhone 13 Pro Max
