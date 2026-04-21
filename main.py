@@ -24,7 +24,7 @@ def display_arw_image(file_path):
 def detect_patches(file_path):
     """
 
-    Convert sensor data and removing auto balancing to get only linear light off the sensor and detect color patches. 
+    Convert sensor data and removing auto balancing to get only linear light off the sensor and detect color patches by returning an array of RGB values per patch. 
 
     """
     with rawpy.imread(file_path) as raw:
