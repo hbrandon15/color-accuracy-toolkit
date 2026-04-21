@@ -48,23 +48,32 @@ def detect_patches(file_path):
 
 # detect_patches(sony_img)
 
-# print()
-cc = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014']
-# print(cc.data)
+def get_reference_rgb(colour_checker):
+    """
+   We need to convert our reference values (xyY -> XYZ -> Linear sRGB) so both sides of the CCM equation live in the same space 
 
-# We need to convert our reference values (xyY -> XYZ -> Linear sRGB)
-# so both sides of the CCM equation live in the same space 
+    """
 
-xyY_values = np.array(list(cc.data.values()))
-print(f"xyY's shape: {xyY_values.shape}")
+    xyY_values = np.array(list(colour_checker.data.values()))
+    #print(f"xyY's shape: {xyY_values.shape}")
 
-# converting xyY -> XYZ color space
-XYZ_values = colour.xyY_to_XYZ(xyY_values)
-print(f"Reference values converted to XYZ color space: \n{XYZ_values}")
+    # converting xyY -> XYZ color space
+    XYZ_values = colour.xyY_to_XYZ(xyY_values)
+    #print(f"Reference values converted to XYZ color space: \n{XYZ_values}")
 
-# converting XYZ -> sRGB
-# since camera data is linear (I explicitly set gamma=(1,1)), reference needs to match the camera data. We will add "apply_cctf_encoding=False" to make it linear.
-RGB_reference = colour.XYZ_to_sRGB(XYZ_values, apply_cctf_encoding=False)
-print(f"Reference values converted to sRGB:\n{RGB_reference}")
+    # converting XYZ -> sRGB
+    # since camera data is linear (I explicitly set gamma=(1,1)), reference needs to match the camera data. We will add "apply_cctf_encoding=False" to make it linear.
+    RGB_reference = colour.XYZ_to_sRGB(XYZ_values, apply_cctf_encoding=False)
+    #print(f"Reference values converted to sRGB:\n{RGB_reference}")
+
+    return RGB_reference
+    
+
+colour_checker = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014']
+
+# print results of colour reference in sRGB:
+print(f"{get_reference_rgb(colour_checker)}")
+# we now have both sides of the equation in sRGB (swatches and RGB_reference)
+
 
 # display_arw_image(sony_img)
