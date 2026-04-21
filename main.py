@@ -83,4 +83,9 @@ colour_checker = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014
 # we now have both sides of the equation in sRGB (swatches and RGB_reference)
 
 swatches = detect_patches(sony_img)
-# display_arw_image(sony_img)
+reference_rgb = get_reference_rgb(colour_checker)
+
+measured = swatches[0]
+colour_correction_matrix = compute_colour_correction_matrix(measured, reference_rgb)
+print(colour_correction_matrix)
+
