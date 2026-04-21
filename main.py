@@ -93,12 +93,19 @@ reference_rgb = get_reference_rgb(colour_checker)
 
 measured = swatches[0]
 colour_correction_matrix = compute_colour_correction_matrix(measured, reference_rgb)
-#print(colour_correction_matrix)
 
-print("measured last 6:")
-print(swatches[0][-6:])
+corrected = swatches[0] @ colour_correction_matrix
+#print(corrected)
 
-print("reference last 6:")
-print(reference_rgb[-6:])
+print("corrected vs reference:")
+for i, (c, r) in enumerate(zip(corrected, reference_rgb)):
+    print(f"patch {i+1:2d}:  corrected={c}  ref={r}")
+
+
+# print("measured last 6:")
+# print(swatches[0][-6:])
+
+# print("reference last 6:")
+# print(reference_rgb[-6:])
 
 
