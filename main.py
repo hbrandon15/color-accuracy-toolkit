@@ -62,5 +62,9 @@ print(f"xyY's shape: {xyY_values.shape}")
 XYZ_values = colour.xyY_to_XYZ(xyY_values)
 print(f"Reference values converted to XYZ color space: \n{XYZ_values}")
 
+# converting XYZ -> sRGB
+# since camera data is linear (I explicitly set gamma=(1,1)), reference needs to match the camera data. We will add "apply_cctf_encoding=False" to make it linear.
+RGB_reference = colour.XYZ_to_sRGB(XYZ_values, apply_cctf_encoding=False)
+print(f"Reference values converted to sRGB:\n{RGB_reference}")
 
 # display_arw_image(sony_img)
