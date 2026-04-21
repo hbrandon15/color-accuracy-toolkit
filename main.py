@@ -70,6 +70,9 @@ def get_reference_rgb(colour_checker):
 
 
 def compute_colour_correction_matrix(measured, reference):
+    """
+    Find the 3x3 matrix that best maps my measured patch colors to the reference patch colors, and give me just the matrix.
+    """
     ccm, _, _, _ = np.linalg.lstsq(measured, reference, rcond=None)
     return ccm
 
