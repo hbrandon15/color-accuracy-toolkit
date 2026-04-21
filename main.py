@@ -56,10 +56,11 @@ cc = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014']
 # so both sides of the CCM equation live in the same space 
 
 xyY_values = np.array(list(cc.data.values()))
-print(xyY_values.shape)
+print(f"xyY's shape: {xyY_values.shape}")
 
+# converting xyY -> XYZ color space
 XYZ_values = colour.xyY_to_XYZ(xyY_values)
-print(XYZ_values)
+print(f"Reference values converted to XYZ color space: \n{XYZ_values}")
 
 
 # display_arw_image(sony_img)
