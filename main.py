@@ -34,7 +34,7 @@ def detect_patches(file_path):
                               no_auto_bright=True,
                               use_camera_wb=True,
                               gamma=(1, 1),  # linear -- no gamma curve applied
-                              output_color=rawpy.ColorSpace.sRGB) # set the output color space
+                              output_color=rawpy.ColorSpace.sRGB)  # set the output color space
 
     # normalize to 0-1 float
     image = rgb.astype(np.float32) / 65535.0
@@ -55,24 +55,31 @@ def get_reference_rgb(colour_checker):
     """
 
     xyY_values = np.array(list(colour_checker.data.values()))
-    #print(f"xyY's shape: {xyY_values.shape}")
+    # print(f"xyY's shape: {xyY_values.shape}")
 
     # converting xyY -> XYZ color space
     XYZ_values = colour.xyY_to_XYZ(xyY_values)
-    #print(f"Reference values converted to XYZ color space: \n{XYZ_values}")
+    # print(f"Reference values converted to XYZ color space: \n{XYZ_values}")
 
     # converting XYZ -> sRGB
     # since camera data is linear (I explicitly set gamma=(1,1)), reference needs to match the camera data. We will add "apply_cctf_encoding=False" to make it linear.
     RGB_reference = colour.XYZ_to_sRGB(XYZ_values, apply_cctf_encoding=False)
-    #print(f"Reference values converted to sRGB:\n{RGB_reference}")
+    # print(f"Reference values converted to sRGB:\n{RGB_reference}")
 
     return RGB_reference
-    
+
+
+def compute_colour_correction_matrix(measured, reference):
+    ccm, _, _, _ = np.linalg.lstsq(measured, reference, rcond=None)
+    return ccm
+
 
 colour_checker = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014']
 
 # print results of colour reference in sRGB:
 print(f"{get_reference_rgb(colour_checker)}")
+
+
 # we now have both sides of the equation in sRGB (swatches and RGB_reference)
 
 
