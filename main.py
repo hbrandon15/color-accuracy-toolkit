@@ -46,10 +46,20 @@ def detect_patches(file_path):
     print(swatches)
 
 
-detect_patches(sony_img)
+# detect_patches(sony_img)
 
-print()
+# print()
 cc = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014']
-print(cc.data)
+# print(cc.data)
+
+# We need to convert our reference values (xyY -> XYZ -> Linear sRGB)
+# so both sides of the CCM equation live in the same space 
+
+xyY_values = np.array(list(cc.data.values()))
+print(xyY_values.shape)
+
+XYZ_values = colour.xyY_to_XYZ(xyY_values)
+print(XYZ_values)
+
 
 # display_arw_image(sony_img)
