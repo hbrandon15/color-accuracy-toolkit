@@ -126,7 +126,7 @@ def analyze_colour_accuracy(sony_img, detect_patches, get_RGB_reference, compute
     delta_e_values = colour.delta_E(
         Lab_corrected, Lab_reference, method='CIE 2000')
     # calculate ΔE2000 for uncorrected values
-    delta_e_uncorrected_values = colour.delta_E()
+    delta_e_uncorrected_values = colour.delta_E(Lab_uncorrected, Lab_reference, method='CIE 2000')
 
     # print("\nΔE2000 per patch:")
     # for i, val in enumerate(delta_e_values):
