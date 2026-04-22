@@ -132,6 +132,10 @@ def analyze_colour_accuracy(file_path):
 
     return RGB_reference, RGB_corrected, delta_e_values
 
+def visualize_swatches(RGB_reference, RGB_corrected, delta_e): 
+
+    return None
+
 
 if __name__ == '__main__':
     analyze_colour_accuracy(sony_img)
