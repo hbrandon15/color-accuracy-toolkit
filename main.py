@@ -88,9 +88,6 @@ def analyze_colour_accuracy(file_path):
     """
     colour_checker = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014']
 
-
-# we now have both sides of the equation in sRGB (swatches and RGB_reference)
-
     swatches = detect_patches(file_path)
     RGB_reference = get_RGB_reference(colour_checker)
 
@@ -101,31 +98,27 @@ def analyze_colour_accuracy(file_path):
 
     RGB_corrected = swatches[0] @ colour_correction_matrix
 
-# need to convert our corrected RGB values to the LAB color space.
-# RGB is not one colorspace, we need to define we are talking about sRGB
+    # RGB is not one colorspace, we need to define we are talking about sRGB
     sRGB = colour.RGB_COLOURSPACES['sRGB']
 
-
-# convert uncorrected values to XYZ -> LAB color space
+    # convert uncorrected values to XYZ -> Lab color space
     XYZ_uncorrected = colour.RGB_to_XYZ(
         RGB_measured, sRGB, apply_cctf_decoding=False)
     Lab_uncorrected = colour.XYZ_to_Lab(XYZ_uncorrected)
 
-# convert corrected values to XYZ -> LAB color space
+    # convert corrected values to XYZ -> Lab color space
     XYZ_corrected = colour.RGB_to_XYZ(
         RGB_corrected, sRGB, apply_cctf_decoding=False)
     Lab_corrected = colour.XYZ_to_Lab(XYZ_corrected)
 
-
-# convert reference values to XYZ -> LAB color space
+    # convert reference values to XYZ -> Lab color space
     XYZ_reference = colour.RGB_to_XYZ(
         RGB_reference, sRGB, apply_cctf_decoding=False)
     Lab_reference = colour.XYZ_to_Lab(XYZ_reference)
 
-# calculate ΔE2000 for corrected values
+    # calculate ΔE2000 for corrected and uncorrected values
     delta_e_values = colour.delta_E(
         Lab_corrected, Lab_reference, method='CIE 2000')
-    # calculate ΔE2000 for uncorrected values
     delta_e_uncorrected_values = colour.delta_E(
         Lab_uncorrected, Lab_reference, method='CIE 2000')
 
