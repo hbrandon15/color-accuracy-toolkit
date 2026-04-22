@@ -130,6 +130,8 @@ def analyze_colour_accuracy(file_path):
     print(f"{'mean':<8} {delta_e_uncorrected_values.mean():>12.4f} {delta_e_values.mean():>12.4f} {delta_e_uncorrected_values.mean() - delta_e_values.mean():>+12.4f}")
     print(f"{'max':<8} {delta_e_uncorrected_values.max():>12.4f} {delta_e_values.max():>12.4f}")
 
+    return RGB_reference, RGB_corrected, delta_e_values
+
 
 if __name__ == '__main__':
     analyze_colour_accuracy(sony_img)
