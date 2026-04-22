@@ -80,7 +80,8 @@ def compute_colour_correction_matrix(measured, reference):
     return ccm
 
 
-colour_checker = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014']
+def analyze_colour_accuracy(sony_img, detect_patches, get_RGB_reference, compute_colour_correction_matrix):
+    colour_checker = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014']
 
 # print results of colour reference in sRGB:
 # print(f"{get_RGB_reference(colour_checker)}")
@@ -88,14 +89,14 @@ colour_checker = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014
 
 # we now have both sides of the equation in sRGB (swatches and RGB_reference)
 
-swatches = detect_patches(sony_img)
-RGB_reference = get_RGB_reference(colour_checker)
+    swatches = detect_patches(sony_img)
+    RGB_reference = get_RGB_reference(colour_checker)
 
-measured = swatches[0]
-colour_correction_matrix = compute_colour_correction_matrix(
-    measured, RGB_reference)
+    measured = swatches[0]
+    colour_correction_matrix = compute_colour_correction_matrix(
+        measured, RGB_reference)
 
-corrected = swatches[0] @ colour_correction_matrix
+    corrected = swatches[0] @ colour_correction_matrix
 # print(corrected)
 
 # print("measured last 6:")
@@ -106,19 +107,25 @@ corrected = swatches[0] @ colour_correction_matrix
 
 # need to convert our corrected RGB values to the LAB color space.
 # RGB is not one colorspace, we need to define we are talking about sRGB
-sRGB = colour.RGB_COLOURSPACES['sRGB']
+    sRGB = colour.RGB_COLOURSPACES['sRGB']
 
-XYZ_corrected = colour.RGB_to_XYZ(corrected, sRGB, apply_cctf_decoding=False)
-Lab_corrected = colour.XYZ_to_Lab(XYZ_corrected)
+    XYZ_corrected = colour.RGB_to_XYZ(
+        corrected, sRGB, apply_cctf_decoding=False)
+    Lab_corrected = colour.XYZ_to_Lab(XYZ_corrected)
 
-XYZ_reference = colour.RGB_to_XYZ(RGB_reference, sRGB, apply_cctf_decoding=False)
-Lab_reference = colour.XYZ_to_Lab(XYZ_reference)
+    XYZ_reference = colour.RGB_to_XYZ(
+        RGB_reference, sRGB, apply_cctf_decoding=False)
+    Lab_reference = colour.XYZ_to_Lab(XYZ_reference)
 
-delta_e_values = colour.delta_E(
-    Lab_corrected, Lab_reference, method='CIE 2000')
+    delta_e_values = colour.delta_E(
+        Lab_corrected, Lab_reference, method='CIE 2000')
 
-print("\nΔE2000 per patch:")
-for i, val in enumerate(delta_e_values):
-    print(f"  patch {i+1:2d}: {val:.4f}")
-print(f"\n  mean: {delta_e_values.mean():.4f}")
-print(f"  max:  {delta_e_values.max():.4f}")
+    print("\nΔE2000 per patch:")
+    for i, val in enumerate(delta_e_values):
+        print(f"  patch {i+1:2d}: {val:.4f}")
+    print(f"\n  mean: {delta_e_values.mean():.4f}")
+    print(f"  max:  {delta_e_values.max():.4f}")
+
+
+analyze_colour_accuracy(file_path)(
+    sony_img, detect_patches, get_RGB_reference, compute_colour_correction_matrix)
