@@ -80,10 +80,10 @@ def compute_colour_correction_matrix(measured, reference):
     return ccm
 
 
-def analyze_colour_accuracy(sony_img, detect_patches, get_RGB_reference, compute_colour_correction_matrix):
+def analyze_colour_accuracy(file_path):
     """
 
-    The goal is to get the measured color swatch data and our RGB reference data into the same color space in order to compute the CCM. The we will all working colorspaces to LAB to compute the ΔE2000 analysis. 
+    The goal is to get the measured color swatch data and our RGB reference data into the same color space in order to compute the CCM. The we will all working colorspaces to LAB to compute the ΔE2000 analysis.
 
     """
     colour_checker = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014']
@@ -126,14 +126,18 @@ def analyze_colour_accuracy(sony_img, detect_patches, get_RGB_reference, compute
     delta_e_values = colour.delta_E(
         Lab_corrected, Lab_reference, method='CIE 2000')
     # calculate ΔE2000 for uncorrected values
-    delta_e_uncorrected_values = colour.delta_E(Lab_uncorrected, Lab_reference, method='CIE 2000')
+    delta_e_uncorrected_values = colour.delta_E(
+        Lab_uncorrected, Lab_reference, method='CIE 2000')
 
-    # print("\nΔE2000 per patch:")
-    # for i, val in enumerate(delta_e_values):
-    #     print(f"  patch {i+1:2d}: {val:.4f}")
-    # print(f"\n  mean: {delta_e_values.mean():.4f}")
-    # print(f"  max:  {delta_e_values.max():.4f}")
+    print(f"\n{'patch':<8} {'uncorrected':>12} {'corrected':>12} {'improvement':>12}")
+    print("-" * 48)
+    for i, (u, c) in enumerate(zip(delta_e_uncorrected_values, delta_e_values)):
+        print(f"patch {i+1:2d}   {u:>12.4f} {c:>12.4f} {u - c:>+12.4f}")
+    print("-" * 48)
+    print(f"{'mean':<8} {delta_e_uncorrected_values.mean():>12.4f} {delta_e_values.mean():>12.4f} {delta_e_uncorrected_values.mean() - delta_e_values.mean():>+12.4f}")
+    print(f"{'max':<8} {delta_e_uncorrected_values.max():>12.4f} {delta_e_values.max():>12.4f}")
 
 
-analyze_colour_accuracy(
-    sony_img, detect_patches, get_RGB_reference, compute_colour_correction_matrix)
+if __name__ == '__main__':
+    analyze_colour_accuracy(sony_img)
+
