@@ -160,6 +160,7 @@ def visualize_swatches(RGB_reference, RGB_corrected, delta_e):
     axes[1, 0].set_ylabel('Corrected', fontsize=9)
     plt.suptitle('ColorChecker: Reference vs Corrected (ΔE2000)')
     plt.tight_layout()
+    plt.savefig('./delta_e_comparison.png', dpi=150, bbox_inches='tight')
     plt.show()
 
 
