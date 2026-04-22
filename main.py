@@ -98,11 +98,6 @@ colour_correction_matrix = compute_colour_correction_matrix(
 corrected = swatches[0] @ colour_correction_matrix
 # print(corrected)
 
-print("corrected vs reference:")
-for i, (c, r) in enumerate(zip(corrected, RGB_reference)):
-    print(f"patch {i+1:2d}:  corrected={c}  ref={r}")
-
-
 # print("measured last 6:")
 # print(swatches[0][-6:])
 
@@ -110,11 +105,20 @@ for i, (c, r) in enumerate(zip(corrected, RGB_reference)):
 # print(RGB_reference[-6:])
 
 # need to convert our corrected RGB values to the LAB color space.
-XYZ_corrected = colour.RGB_to_XYZ(corrected, apply_cctf_decoding=False)
+# RGB is not one colorspace, we need to define we are talking about sRGB
+sRGB = colour.RGB_COLOURSPACES['sRGB']
+
+XYZ_corrected = colour.RGB_to_XYZ(corrected, sRGB, apply_cctf_decoding=False)
 Lab_corrected = colour.XYZ_to_Lab(XYZ_corrected)
 
-XYZ_reference = colour.RGB_to_XYZ(RGB_reference, apply_cctf_decoding=False)
+XYZ_reference = colour.RGB_to_XYZ(RGB_reference, sRGB, apply_cctf_decoding=False)
 Lab_reference = colour.XYZ_to_Lab(XYZ_reference)
 
-delta_e_values = colour.delta_E(Lab_corrected, Lab_reference, method='CIE 2000')
+delta_e_values = colour.delta_E(
+    Lab_corrected, Lab_reference, method='CIE 2000')
 
+print("\nΔE2000 per patch:")
+for i, val in enumerate(delta_e_values):
+    print(f"  patch {i+1:2d}: {val:.4f}")
+print(f"\n  mean: {delta_e_values.mean():.4f}")
+print(f"  max:  {delta_e_values.max():.4f}")
