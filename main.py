@@ -94,19 +94,19 @@ def analyze_colour_accuracy(sony_img, detect_patches, get_RGB_reference, compute
     swatches = detect_patches(sony_img)
     RGB_reference = get_RGB_reference(colour_checker)
 
-    measured = swatches[0]
+    RGB_measured = swatches[0]
 
     colour_correction_matrix = compute_colour_correction_matrix(
-        measured, RGB_reference)
+        RGB_measured, RGB_reference)
 
-    corrected = swatches[0] @ colour_correction_matrix
+    RGB_corrected = swatches[0] @ colour_correction_matrix
 
 # need to convert our corrected RGB values to the LAB color space.
 # RGB is not one colorspace, we need to define we are talking about sRGB
     sRGB = colour.RGB_COLOURSPACES['sRGB']
 
     XYZ_corrected = colour.RGB_to_XYZ(
-        corrected, sRGB, apply_cctf_decoding=False)
+        RGB_corrected, sRGB, apply_cctf_decoding=False)
     Lab_corrected = colour.XYZ_to_Lab(XYZ_corrected)
 
     XYZ_reference = colour.RGB_to_XYZ(
@@ -123,5 +123,5 @@ def analyze_colour_accuracy(sony_img, detect_patches, get_RGB_reference, compute
     print(f"  max:  {delta_e_values.max():.4f}")
 
 
-analyze_colour_accuracy(file_path)(
+analyze_colour_accuracy(
     sony_img, detect_patches, get_RGB_reference, compute_colour_correction_matrix)
