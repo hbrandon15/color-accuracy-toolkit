@@ -132,7 +132,8 @@ def analyze_colour_accuracy(file_path):
 
     return RGB_reference, RGB_corrected, delta_e_values
 
-def visualize_swatches(RGB_reference, RGB_corrected, delta_e): 
+
+def visualize_swatches(RGB_reference, RGB_corrected, delta_e):
     """
 
     Before we can visualize, we need to understand our RGB data is LINEAR. We will need to apply gamma encoding before display so the colors look correct visually. 
@@ -142,10 +143,25 @@ def visualize_swatches(RGB_reference, RGB_corrected, delta_e):
     RGB_reference_with_gamma = colour.cctf_encoding(RGB_reference)
     RGB_corrected_with_gamma = colour.cctf_encoding(RGB_corrected)
 
+    # create the figure
+    # 2 row grid of 24 axes -- row 0 for reference, row 1 for corrected
+    fig, axes = plt.subplot(2, 24, figsize=(24, 3))
 
-    return None
+    # fill each column
+    for i in range(24):
+        axes[0, i].imshow([[RGB_reference_with_gamma[i]]])
+        axes[1, i].imshow([[RGB_corrected_with_gamma[i]]])
+        axes[0, i].axis('off')
+        axes[1, i].axis('off')
+        axes[1, i].set_title(f"{delta_e[i]:.1f}", fontsize=7)
+
+    # label the rows and show
+    axes[0, 0].set_ylabel('Reference', fontsize=9)
+    axes[1, 0].set_ylabel('Corrected', fontsize=9)
+    plt.suptitle('ColorChecker: Reference vs Corrected (ΔE2000)')
+    plt.tight_layout()
+    plt.show()
 
 
 if __name__ == '__main__':
     analyze_colour_accuracy(sony_img)
-
