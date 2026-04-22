@@ -91,7 +91,7 @@ def analyze_colour_accuracy(file_path):
 
 # we now have both sides of the equation in sRGB (swatches and RGB_reference)
 
-    swatches = detect_patches(sony_img)
+    swatches = detect_patches(file_path)
     RGB_reference = get_RGB_reference(colour_checker)
 
     RGB_measured = swatches[0]
