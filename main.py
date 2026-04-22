@@ -81,10 +81,12 @@ def compute_colour_correction_matrix(measured, reference):
 
 
 def analyze_colour_accuracy(sony_img, detect_patches, get_RGB_reference, compute_colour_correction_matrix):
-    colour_checker = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014']
+    """
 
-# print results of colour reference in sRGB:
-# print(f"{get_RGB_reference(colour_checker)}")
+    The goal is to get the measured color swatch data and our RGB reference data into the same color space in order to compute the CCM. The we will all working colorspaces to LAB to compute the ΔE2000 analysis. 
+
+    """
+    colour_checker = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014']
 
 
 # we now have both sides of the equation in sRGB (swatches and RGB_reference)
@@ -93,17 +95,11 @@ def analyze_colour_accuracy(sony_img, detect_patches, get_RGB_reference, compute
     RGB_reference = get_RGB_reference(colour_checker)
 
     measured = swatches[0]
+
     colour_correction_matrix = compute_colour_correction_matrix(
         measured, RGB_reference)
 
     corrected = swatches[0] @ colour_correction_matrix
-# print(corrected)
-
-# print("measured last 6:")
-# print(swatches[0][-6:])
-
-# print("reference last 6:")
-# print(RGB_reference[-6:])
 
 # need to convert our corrected RGB values to the LAB color space.
 # RGB is not one colorspace, we need to define we are talking about sRGB
