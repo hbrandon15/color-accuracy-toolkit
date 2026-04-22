@@ -133,6 +133,15 @@ def analyze_colour_accuracy(file_path):
     return RGB_reference, RGB_corrected, delta_e_values
 
 def visualize_swatches(RGB_reference, RGB_corrected, delta_e): 
+    """
+
+    Before we can visualize, we need to understand our RGB data is LINEAR. We will need to apply gamma encoding before display so the colors look correct visually. 
+
+    """
+    # add gamma to linear RGB values
+    RGB_reference_with_gamma = colour.cctf_encoding(RGB_reference)
+    RGB_corrected_with_gamma = colour.cctf_encoding(RGB_corrected)
+
 
     return None
 
