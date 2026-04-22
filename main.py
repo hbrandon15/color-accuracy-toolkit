@@ -145,7 +145,7 @@ def visualize_swatches(RGB_reference, RGB_corrected, delta_e):
 
     # create the figure
     # 2 row grid of 24 axes -- row 0 for reference, row 1 for corrected
-    fig, axes = plt.subplot(2, 24, figsize=(24, 3))
+    fig, axes = plt.subplots(2, 24, figsize=(24, 3))
 
     # fill each column
     for i in range(24):
