@@ -45,7 +45,7 @@ def detect_patches(file_path):
     return swatches
 
 
-def get_reference_rgb(colour_checker):
+def get_RGB_reference(colour_checker):
     """
    We need to convert our reference values (xyY -> XYZ -> Linear sRGB) so both sides of the CCM equation live in the same space
 
@@ -83,23 +83,23 @@ def compute_colour_correction_matrix(measured, reference):
 colour_checker = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014']
 
 # print results of colour reference in sRGB:
-# print(f"{get_reference_rgb(colour_checker)}")
+# print(f"{get_RGB_reference(colour_checker)}")
 
 
 # we now have both sides of the equation in sRGB (swatches and RGB_reference)
 
 swatches = detect_patches(sony_img)
-reference_rgb = get_reference_rgb(colour_checker)
+RGB_reference = get_RGB_reference(colour_checker)
 
 measured = swatches[0]
 colour_correction_matrix = compute_colour_correction_matrix(
-    measured, reference_rgb)
+    measured, RGB_reference)
 
 corrected = swatches[0] @ colour_correction_matrix
 # print(corrected)
 
 print("corrected vs reference:")
-for i, (c, r) in enumerate(zip(corrected, reference_rgb)):
+for i, (c, r) in enumerate(zip(corrected, RGB_reference)):
     print(f"patch {i+1:2d}:  corrected={c}  ref={r}")
 
 
@@ -107,9 +107,12 @@ for i, (c, r) in enumerate(zip(corrected, reference_rgb)):
 # print(swatches[0][-6:])
 
 # print("reference last 6:")
-# print(reference_rgb[-6:])
+# print(RGB_reference[-6:])
 
 # need to convert our corrected RGB values to the LAB color space.
-XYZ = colour.RGB_to_XYZ(corrected)
-Lab = colour.XYZ_to_Lab(XYZ)
+XYZ_corrected = colour.RGB_to_XYZ(corrected)
+Lab_corrected = colour.XYZ_to_Lab(XYZ_corrected)
+
+XYZ_reference = colour.RGB_to_XYZ(RGB_reference)
+
 
