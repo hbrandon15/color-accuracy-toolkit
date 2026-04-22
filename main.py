@@ -114,5 +114,7 @@ XYZ_corrected = colour.RGB_to_XYZ(corrected)
 Lab_corrected = colour.XYZ_to_Lab(XYZ_corrected)
 
 XYZ_reference = colour.RGB_to_XYZ(RGB_reference)
+Lab_reference = colour.XYZ_to_Lab(XYZ_reference)
 
+delta_e_values = colour.delta_E(Lab_corrected, Lab_reference, method='CIE 2000')
 
