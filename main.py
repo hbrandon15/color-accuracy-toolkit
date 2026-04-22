@@ -60,14 +60,14 @@ def get_reference_rgb(colour_checker):
 
     # converting XYZ -> sRGB
     # since camera data is linear (I explicitly set gamma=(1,1)), reference needs to match the camera data. We will add "apply_cctf_encoding=False" to make it linear.
-    #RGB_reference = colour.XYZ_to_sRGB(XYZ_values, apply_cctf_encoding=False)
+    # RGB_reference = colour.XYZ_to_sRGB(XYZ_values, apply_cctf_encoding=False)
 
     # corrected chromatic adaptation mismatch. ColorChecker reference is measured under D50 while sRGB is defined under D65
     RGB_reference = colour.XYZ_to_sRGB(XYZ_values,
-                                       illuminant=np.array([0.3457, 0.3585]),  # D50 whitepoint
+                                       illuminant=np.array(
+                                           [0.3457, 0.3585]),  # D50 whitepoint
                                        apply_cctf_encoding=False
-)
-
+                                       )
 
     return RGB_reference
 
@@ -92,10 +92,11 @@ swatches = detect_patches(sony_img)
 reference_rgb = get_reference_rgb(colour_checker)
 
 measured = swatches[0]
-colour_correction_matrix = compute_colour_correction_matrix(measured, reference_rgb)
+colour_correction_matrix = compute_colour_correction_matrix(
+    measured, reference_rgb)
 
 corrected = swatches[0] @ colour_correction_matrix
-#print(corrected)
+# print(corrected)
 
 print("corrected vs reference:")
 for i, (c, r) in enumerate(zip(corrected, reference_rgb)):
@@ -108,4 +109,7 @@ for i, (c, r) in enumerate(zip(corrected, reference_rgb)):
 # print("reference last 6:")
 # print(reference_rgb[-6:])
 
+# need to convert our corrected RGB values to the LAB color space.
+XYZ = colour.RGB_to_XYZ(corrected)
+Lab = colour.XYZ_to_Lab(XYZ)
 
