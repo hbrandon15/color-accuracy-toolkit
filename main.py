@@ -89,15 +89,14 @@ def analyze_colour_accuracy(file_path):
     """
     colour_checker = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014']
 
-    swatches = detect_patches(file_path)
+    image, quadrilateral, RGB_measured = detect_patches(file_path)
     RGB_reference = get_RGB_reference(colour_checker)
 
-    RGB_measured = swatches[0]
 
     colour_correction_matrix = compute_colour_correction_matrix(
         RGB_measured, RGB_reference)
 
-    RGB_corrected = swatches[0] @ colour_correction_matrix
+    RGB_corrected = RGB_measured @ colour_correction_matrix
 
     # RGB is not one colorspace, we need to define we are talking about sRGB
     sRGB = colour.RGB_COLOURSPACES['sRGB']
