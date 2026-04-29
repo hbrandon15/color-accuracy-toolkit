@@ -40,9 +40,10 @@ def detect_patches(file_path):
     image = rgb.astype(np.float32) / 65535.0
 
     # detect the color checker
-    swatches = ccd.detect_colour_checkers_segmentation(image)
+    swatches = ccd.detect_colour_checkers_segmentation(image, additional_data=True)
+    data = swatches[0]
 
-    return swatches
+    return image, data.quadrilateral, data.swatch_colours
 
 
 def get_RGB_reference(colour_checker):
@@ -165,6 +166,7 @@ def visualize_swatches(RGB_reference, RGB_corrected, delta_e):
 
 
 if __name__ == '__main__':
-    RGB_reference, RGB_corrected, delta_e_values = analyze_colour_accuracy(
-        sony_img)
-    visualize_swatches(RGB_reference, RGB_corrected, delta_e_values)
+    detect_patches(sony_img)
+    # RGB_reference, RGB_corrected, delta_e_values = analyze_colour_accuracy(
+    #     sony_img)
+    # visualize_swatches(RGB_reference, RGB_corrected, delta_e_values)
