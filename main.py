@@ -40,10 +40,11 @@ def detect_patches(file_path):
     image = rgb.astype(np.float32) / 65535.0
 
     # detect the color checker
-    swatches = ccd.detect_colour_checkers_segmentation(image, additional_data=True)
+    swatches = ccd.detect_colour_checkers_segmentation(
+        image, additional_data=True)
     data = swatches[0]
 
-    return image, data.quadrilateral, data.swatch_colours
+    return image, data.colour_checker, data.swatch_colours
 
 
 def get_RGB_reference(colour_checker):
@@ -89,9 +90,8 @@ def analyze_colour_accuracy(file_path):
     """
     colour_checker = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014']
 
-    image, quadrilateral, RGB_measured = detect_patches(file_path)
+    image, checker_crop, RGB_measured = detect_patches(file_path)
     RGB_reference = get_RGB_reference(colour_checker)
-
 
     colour_correction_matrix = compute_colour_correction_matrix(
         RGB_measured, RGB_reference)
@@ -130,13 +130,13 @@ def analyze_colour_accuracy(file_path):
     print(f"{'mean':<8} {delta_e_uncorrected_values.mean():>12.4f} {delta_e_values.mean():>12.4f} {delta_e_uncorrected_values.mean() - delta_e_values.mean():>+12.4f}")
     print(f"{'max':<8} {delta_e_uncorrected_values.max():>12.4f} {delta_e_values.max():>12.4f}")
 
-    return image, quadrilateral, RGB_reference, RGB_corrected, delta_e_values
+    return image, checker_crop, RGB_reference, RGB_corrected, delta_e_values
 
 
-def visualize_swatches(image, quadrilateral, RGB_reference, RGB_corrected, delta_e):
+def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_e):
     """
 
-    Before we can visualize, we need to understand our RGB data is LINEAR. We will need to apply gamma encoding before display so the colors look correct visually. 
+    Before we can visualize, we need to understand our RGB data is LINEAR. We will need to apply gamma encoding before display so the colors look correct visually.
 
     """
     # add gamma to linear RGB values
@@ -146,15 +146,18 @@ def visualize_swatches(image, quadrilateral, RGB_reference, RGB_corrected, delta
     # create the figure
     fig = plt.figure(figsize=(24, 8))
     gs = fig.add_gridspec(3, 24, height_ratios=[4, 1, 1])
-    ax_photo = fig.add_subplot(gs[0, :])
-    axes = np.array([[fig.add_subplot(gs[r+1, c]) for c in range(24)] for r in range(2)])
-
+    ax_photo = fig.add_subplot(gs[0, :12])
+    ax_checker = fig.add_subplot(gs[0, 12:])
+    axes = np.array([[fig.add_subplot(gs[r+1, c])
+                    for c in range(24)] for r in range(2)])
 
     ax_photo.imshow(colour.cctf_encoding(np.clip(image, 0, 1)))
-    from matplotlib.patches import Polygon
-    ax_photo.add_patch(Polygon(quadrilateral, closed=True, edgecolor='lime', facecolor='none', linewidth=2))
     ax_photo.axis('off')
+    ax_photo.set_title('Scene', fontsize=9)
 
+    ax_checker.imshow(colour.cctf_encoding(np.clip(checker_crop, 0, 1)))
+    ax_checker.axis('off')
+    ax_checker.set_title('Detected ColorChecker', fontsize=9)
 
     # fill each column
     for i in range(24):
@@ -174,7 +177,6 @@ def visualize_swatches(image, quadrilateral, RGB_reference, RGB_corrected, delta
 
 
 if __name__ == '__main__':
-    
-    image, quadrilateral, RGB_reference, RGB_corrected, delta_e_values = analyze_colour_accuracy(
+    image, checker_crop, RGB_reference, RGB_corrected, delta_e_values = analyze_colour_accuracy(
         sony_img)
-    visualize_swatches(image, quadrilateral, RGB_reference, RGB_corrected, delta_e_values)
+    visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_e_values)
