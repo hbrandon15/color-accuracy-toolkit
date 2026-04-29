@@ -165,7 +165,7 @@ def visualize_swatches(RGB_reference, RGB_corrected, delta_e):
 
 
 if __name__ == '__main__':
-    detect_patches(sony_img)
-    # RGB_reference, RGB_corrected, delta_e_values = analyze_colour_accuracy(
-    #     sony_img)
-    # visualize_swatches(RGB_reference, RGB_corrected, delta_e_values)
+    
+    image, quadrilateral, RGB_reference, RGB_corrected, delta_e_values = analyze_colour_accuracy(
+        sony_img)
+    visualize_swatches(RGB_reference, RGB_corrected, delta_e_values)
