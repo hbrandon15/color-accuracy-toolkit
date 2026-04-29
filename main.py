@@ -133,7 +133,7 @@ def analyze_colour_accuracy(file_path):
     return image, quadrilateral, RGB_reference, RGB_corrected, delta_e_values
 
 
-def visualize_swatches(RGB_reference, RGB_corrected, delta_e):
+def visualize_swatches(image, quadrilateral, RGB_reference, RGB_corrected, delta_e):
     """
 
     Before we can visualize, we need to understand our RGB data is LINEAR. We will need to apply gamma encoding before display so the colors look correct visually. 
@@ -168,4 +168,4 @@ if __name__ == '__main__':
     
     image, quadrilateral, RGB_reference, RGB_corrected, delta_e_values = analyze_colour_accuracy(
         sony_img)
-    visualize_swatches(RGB_reference, RGB_corrected, delta_e_values)
+    visualize_swatches(image, quadrilateral, RGB_reference, RGB_corrected, delta_e_values)
