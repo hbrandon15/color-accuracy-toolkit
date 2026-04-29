@@ -144,8 +144,17 @@ def visualize_swatches(image, quadrilateral, RGB_reference, RGB_corrected, delta
     RGB_corrected_with_gamma = colour.cctf_encoding(RGB_corrected)
 
     # create the figure
-    # 2 row grid of 24 axes -- row 0 for reference, row 1 for corrected
-    fig, axes = plt.subplots(2, 24, figsize=(24, 3))
+    fig = plt.figure(figsize=(24, 8))
+    gs = fig.add_gridspec(3, 24, height_ratios=[4, 1, 1])
+    ax_photo = fig.add_subplot(gs[0, :])
+    axes = np.array([[fig.add_subplot(gs[r+1, c]) for c in range(24)] for r in range(2)])
+
+
+    ax_photo.imshow(colour.cctf_encoding(np.clip(image, 0, 1)))
+    from matplotlib.patches import Polygon
+    ax_photo.add_patch(Polygon(quadrilateral, closed=True, edgecolor='lime', facecolor='none', linewidth=2))
+    ax_photo.axis('off')
+
 
     # fill each column
     for i in range(24):
