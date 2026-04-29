@@ -40,9 +40,11 @@ def detect_patches(file_path):
     image = rgb.astype(np.float32) / 65535.0
 
     # detect the color checker
-    swatches = ccd.detect_colour_checkers_segmentation(image)
+    swatches = ccd.detect_colour_checkers_segmentation(
+        image, additional_data=True)
+    data = swatches[0]
 
-    return swatches
+    return image, data.colour_checker, data.swatch_colours
 
 
 def get_RGB_reference(colour_checker):
@@ -88,15 +90,13 @@ def analyze_colour_accuracy(file_path):
     """
     colour_checker = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014']
 
-    swatches = detect_patches(file_path)
+    image, checker_crop, RGB_measured = detect_patches(file_path)
     RGB_reference = get_RGB_reference(colour_checker)
-
-    RGB_measured = swatches[0]
 
     colour_correction_matrix = compute_colour_correction_matrix(
         RGB_measured, RGB_reference)
 
-    RGB_corrected = swatches[0] @ colour_correction_matrix
+    RGB_corrected = RGB_measured @ colour_correction_matrix
 
     # RGB is not one colorspace, we need to define we are talking about sRGB
     sRGB = colour.RGB_COLOURSPACES['sRGB']
@@ -130,7 +130,53 @@ def analyze_colour_accuracy(file_path):
     print(f"{'mean':<8} {delta_e_uncorrected_values.mean():>12.4f} {delta_e_values.mean():>12.4f} {delta_e_uncorrected_values.mean() - delta_e_values.mean():>+12.4f}")
     print(f"{'max':<8} {delta_e_uncorrected_values.max():>12.4f} {delta_e_values.max():>12.4f}")
 
+    return image, checker_crop, RGB_reference, RGB_corrected, delta_e_values
+
+
+def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_e):
+    """
+
+    Before we can visualize, we need to understand our RGB data is LINEAR. We will need to apply gamma encoding before display so the colors look correct visually.
+
+    """
+    # add gamma to linear RGB values
+    RGB_reference_with_gamma = colour.cctf_encoding(RGB_reference)
+    RGB_corrected_with_gamma = colour.cctf_encoding(RGB_corrected)
+
+    # create the figure
+    fig = plt.figure(figsize=(24, 8))
+    gs = fig.add_gridspec(3, 24, height_ratios=[4, 1, 1])
+    ax_photo = fig.add_subplot(gs[0, :12])
+    ax_checker = fig.add_subplot(gs[0, 12:])
+    axes = np.array([[fig.add_subplot(gs[r+1, c])
+                    for c in range(24)] for r in range(2)])
+
+    ax_photo.imshow(colour.cctf_encoding(np.clip(image, 0, 1)))
+    ax_photo.axis('off')
+    ax_photo.set_title('Scene', fontsize=9)
+
+    ax_checker.imshow(colour.cctf_encoding(np.clip(checker_crop, 0, 1)))
+    ax_checker.axis('off')
+    ax_checker.set_title('Detected ColorChecker', fontsize=9)
+
+    # fill each column
+    for i in range(24):
+        axes[0, i].imshow([[RGB_reference_with_gamma[i]]])
+        axes[1, i].imshow([[RGB_corrected_with_gamma[i]]])
+        axes[0, i].axis('off')
+        axes[1, i].axis('off')
+        axes[1, i].set_title(f"{delta_e[i]:.1f}", fontsize=7)
+
+    # label the rows and show
+    axes[0, 0].set_ylabel('Reference', fontsize=9)
+    axes[1, 0].set_ylabel('Corrected', fontsize=9)
+    plt.suptitle('ColorChecker: Reference vs Corrected (ΔE2000)')
+    plt.tight_layout()
+    plt.savefig('./delta_e_comparison.png', dpi=150, bbox_inches='tight')
+    plt.show()
+
 
 if __name__ == '__main__':
-    analyze_colour_accuracy(sony_img)
-
+    image, checker_crop, RGB_reference, RGB_corrected, delta_e_values = analyze_colour_accuracy(
+        sony_img)
+    visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_e_values)
