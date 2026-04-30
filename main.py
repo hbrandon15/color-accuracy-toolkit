@@ -181,17 +181,17 @@ def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_
 
         # convert corrected values to XYZ from sRGB color space
         # convert corrected values to xy from XYZ
-        RGB_corrected_XYZ = colour.sRGB_to_XYZ(RGB_corrected, sRGB, apply_cctf_decoding=False)
+        RGB_corrected_XYZ = colour.RGB_to_XYZ(RGB_corrected, sRGB, apply_cctf_decoding=False)
         RGB_corrected_xy = colour.XYZ_to_xy(RGB_corrected_XYZ)
        
        
 
         # convert corrected values to XYZ from sRGB color space
         # convert corrected values to xy from XYZ
-        RGB_reference_XYZ = colour.sRGB_to_XYZ(RGB_reference, sRGB, apply_cctf_decoding=False)
+        RGB_reference_XYZ = colour.RGB_to_XYZ(RGB_reference, sRGB, apply_cctf_decoding=False)
         RGB_reference_xy = colour.XYZ_to_xy(RGB_reference_XYZ)
 
-    return None
+        return None
 
 
 if __name__ == '__main__':
