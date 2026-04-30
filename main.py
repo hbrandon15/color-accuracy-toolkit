@@ -175,8 +175,25 @@ def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_
     plt.savefig('./delta_e_comparison.png', dpi=150, bbox_inches='tight')
     plt.show()
 
+    def plot_gamut(RGB_reference, RGB_corrected):
+
+        # convert corrected values to XYZ from sRGB color space
+        # convert corrected values to xy from XYZ
+        RGB_corrected_XYZ = colour.sRGB_to_XYZ(RGB_corrected)
+        RGB_corrected_xy = colour.XYZ_to_xy(RGB_corrected_XYZ)
+       
+       
+
+        # convert corrected values to XYZ from sRGB color space
+        # convert corrected values to xy from XYZ
+        RGB_reference_XYZ = colour.sRGB_to_XYZ(RGB_reference)
+        RGB_reference_xy = colour.XYZ_to_xy(RGB_reference_XYZ)
+
+    return None
+
 
 if __name__ == '__main__':
     image, checker_crop, RGB_reference, RGB_corrected, delta_e_values = analyze_colour_accuracy(
         sony_img)
-    visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_e_values)
+    visualize_swatches(image, checker_crop, RGB_reference,
+                       RGB_corrected, delta_e_values)
