@@ -177,6 +177,8 @@ def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_
 
     def plot_gamut(RGB_reference, RGB_corrected):
 
+        sRGB = colour.RGB_COLOURSPACES['sRGB']
+
         # convert corrected values to XYZ from sRGB color space
         # convert corrected values to xy from XYZ
         RGB_corrected_XYZ = colour.sRGB_to_XYZ(RGB_corrected)
