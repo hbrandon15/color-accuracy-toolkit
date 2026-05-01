@@ -192,6 +192,10 @@ def plot_gamut(RGB_reference, RGB_corrected):
         RGB_reference, sRGB, apply_cctf_decoding=False)
     RGB_reference_xy = colour.XYZ_to_xy(RGB_reference_XYZ)
 
+    # cordinates obtained for plot
+    
+    fig, ax = colour.plotting.plot_RGB_colourspaces_in_chromaticity_diagram_CIE1931(['sRGB'], show=False))
+
 
 if __name__ == '__main__':
     image, checker_crop, RGB_reference, RGB_corrected, delta_e_values = analyze_colour_accuracy(
