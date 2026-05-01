@@ -194,7 +194,11 @@ def plot_gamut(RGB_reference, RGB_corrected):
 
     # cordinates obtained for plot
     
-    fig, ax = colour.plotting.plot_RGB_colourspaces_in_chromaticity_diagram_CIE1931(['sRGB'], show=False))
+    fig, ax = colour.plotting.plot_RGB_colourspaces_in_chromaticity_diagram_CIE1931(['sRGB'], show=False)
+
+    # Add scatter points for x values [0] and y values [1]
+    ax.scatter(RGB_reference_xy[:, 0], RGB_reference_xy[:, 1], ...)
+    ax.scatter(RGB_corrected_xy[:, 0], RGB_corrected_xy[:, 1], ...)
 
 
 if __name__ == '__main__':
