@@ -209,7 +209,9 @@ def plot_gamut(RGB_reference, RGB_corrected):
                     xy=RGB_corrected_xy[i],       # arrow tip
                     xytext=RGB_reference_xy[i],   # arrow tail
                     arrowprops=dict(arrowstyle='->', color='white', lw=0.8))
-
+        
+    # save file
+    plt.savefig('./gamut_plot.png', dpi=150, bbox_inches='tight')
     plt.show()
 
 
