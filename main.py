@@ -193,13 +193,22 @@ def plot_gamut(RGB_reference, RGB_corrected):
     RGB_reference_xy = colour.XYZ_to_xy(RGB_reference_XYZ)
 
     # cordinates obtained for plot
-    
-    fig, ax = colour.plotting.plot_RGB_colourspaces_in_chromaticity_diagram_CIE1931(['sRGB'], show=False)
+
+    fig, ax = colour.plotting.plot_RGB_colourspaces_in_chromaticity_diagram_CIE1931([
+                                                                                    'sRGB'], show=False)
 
     # Add scatter points for x values [0] and y values [1]
-    ax.scatter(RGB_reference_xy[:, 0], RGB_reference_xy[:, 1], label='Reference')
-    ax.scatter(RGB_corrected_xy[:, 0], RGB_corrected_xy[:, 1], label='Corrected')
+    ax.scatter(RGB_reference_xy[:, 0],
+               RGB_reference_xy[:, 1], label='Reference')
+    ax.scatter(RGB_corrected_xy[:, 0],
+               RGB_corrected_xy[:, 1], label='Corrected')
     ax.legend()
+
+    for i in range(len(RGB_reference_xy)):
+        ax.annotate('',
+                    xy=RGB_corrected_xy[i],       # arrow tip
+                    xytext=RGB_reference_xy[i],   # arrow tail
+                    arrowprops=dict(arrowstyle='->', color='white', lw=0.8))
 
     plt.show()
 
