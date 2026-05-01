@@ -176,7 +176,48 @@ def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_
     plt.show()
 
 
+def plot_gamut(RGB_reference, RGB_corrected):
+
+    sRGB = colour.RGB_COLOURSPACES['sRGB']
+
+    # convert corrected values to XYZ from sRGB color space
+    # convert corrected values to xy from XYZ
+    RGB_corrected_XYZ = colour.RGB_to_XYZ(
+        RGB_corrected, sRGB, apply_cctf_decoding=False)
+    RGB_corrected_xy = colour.XYZ_to_xy(RGB_corrected_XYZ)
+
+    # convert corrected values to XYZ from sRGB color space
+    # convert corrected values to xy from XYZ
+    RGB_reference_XYZ = colour.RGB_to_XYZ(
+        RGB_reference, sRGB, apply_cctf_decoding=False)
+    RGB_reference_xy = colour.XYZ_to_xy(RGB_reference_XYZ)
+
+    # cordinates obtained for plot
+
+    fig, ax = colour.plotting.plot_RGB_colourspaces_in_chromaticity_diagram_CIE1931([
+                                                                                    'sRGB'], show=False)
+
+    # Add scatter points for x values [0] and y values [1]
+    ax.scatter(RGB_reference_xy[:, 0],
+               RGB_reference_xy[:, 1], label='Reference')
+    ax.scatter(RGB_corrected_xy[:, 0],
+               RGB_corrected_xy[:, 1], label='Corrected')
+    ax.legend()
+
+    for i in range(len(RGB_reference_xy)):
+        ax.annotate('',
+                    xy=RGB_corrected_xy[i],       # arrow tip
+                    xytext=RGB_reference_xy[i],   # arrow tail
+                    arrowprops=dict(arrowstyle='->', color='white', lw=0.8))
+        
+    # save file
+    plt.savefig('./gamut_plot.png', dpi=150, bbox_inches='tight')
+    plt.show()
+
+
 if __name__ == '__main__':
     image, checker_crop, RGB_reference, RGB_corrected, delta_e_values = analyze_colour_accuracy(
         sony_img)
-    visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_e_values)
+    visualize_swatches(image, checker_crop, RGB_reference,
+                       RGB_corrected, delta_e_values)
+    plot_gamut(RGB_reference, RGB_corrected)
