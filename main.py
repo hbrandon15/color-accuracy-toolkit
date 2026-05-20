@@ -6,6 +6,7 @@ import colour
 
 
 sony_img = "./imgs/AKG07755.ARW"
+iphone_img = "./imgs/IMG_2188.DNG"
 
 
 def display_arw_image(file_path):
