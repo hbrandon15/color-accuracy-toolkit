@@ -83,7 +83,7 @@ def compute_colour_correction_matrix(measured, reference):
     return ccm
 
 
-def analyze_colour_accuracy(file_path):
+def analyze_colour_accuracy(file_path, label):
     """
 
     The goal is to get the measured color swatch data and our RGB reference data into the same color space in order to compute the CCM. The we will all working colorspaces to LAB to compute the ΔE2000 analysis.
@@ -131,7 +131,7 @@ def analyze_colour_accuracy(file_path):
     print(f"{'mean':<8} {delta_e_uncorrected_values.mean():>12.4f} {delta_e_values.mean():>12.4f} {delta_e_uncorrected_values.mean() - delta_e_values.mean():>+12.4f}")
     print(f"{'max':<8} {delta_e_uncorrected_values.max():>12.4f} {delta_e_values.max():>12.4f}")
 
-    return image, checker_crop, RGB_reference, RGB_corrected, delta_e_values
+    return image, checker_crop, RGB_reference, RGB_corrected, delta_e_values, delta_e_uncorrected_values
 
 
 def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_e):
@@ -210,7 +210,7 @@ def plot_gamut(RGB_reference, RGB_corrected):
                     xy=RGB_corrected_xy[i],       # arrow tip
                     xytext=RGB_reference_xy[i],   # arrow tail
                     arrowprops=dict(arrowstyle='->', color='white', lw=0.8))
-        
+
     # save file
     plt.savefig('./gamut_plot.png', dpi=150, bbox_inches='tight')
     plt.show()
