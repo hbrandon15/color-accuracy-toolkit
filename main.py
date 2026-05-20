@@ -215,7 +215,7 @@ def plot_gamut(RGB_reference, RGB_corrected):
     plt.savefig('./gamut_plot.png', dpi=150, bbox_inches='tight')
     plt.show()
 
-def compare_cameras(): 
+def compare_cameras(iphone_delta_e, sony_delta_e): 
     """
     Compare the results between the Iphone 13 Pro Max and Sony a7IV
     """
