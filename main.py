@@ -231,6 +231,8 @@ def compare_cameras(iphone_delta_e, sony_delta_e):
     ax.legend()
     ax.set_xlabel('Patch')
     ax.set_ylabel('ΔE 2000')
+    ax.set_title('Color Accuracy: Sony a7IV vs. iPhone 13 Pro Max')
+
 
     return None
 
