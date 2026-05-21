@@ -223,6 +223,12 @@ def compare_cameras(iphone_delta_e, sony_delta_e):
     # create the figure
     fig, ax = plt.subplots(figsize=(16, 6))
 
+    x = np.arange(24)
+    width = .35
+
+    ax.bar(x - width/2, sony_delta_e, width, label='...') # sony img
+    ax.bar(x - width/2, iphone_delta_e, width, label='...') # iphone img
+
     return None
 
 
