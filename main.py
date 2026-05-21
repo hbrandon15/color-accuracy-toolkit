@@ -123,6 +123,7 @@ def analyze_colour_accuracy(file_path, label):
     delta_e_uncorrected_values = colour.delta_E(
         Lab_uncorrected, Lab_reference, method='CIE 2000')
 
+    print(f"\n{label}")
     print(f"\n{'patch':<8} {'uncorrected':>12} {'corrected':>12} {'improvement':>12}")
     print("-" * 48)
     for i, (u, c) in enumerate(zip(delta_e_uncorrected_values, delta_e_values)):
@@ -241,10 +242,10 @@ def compare_cameras(iphone_delta_e, sony_delta_e):
 if __name__ == '__main__':
     # analyze Sony img
     sony_image, sony_checker_crop, sony_RGB_reference, sony_RGB_corrected, sony_delta_e, sony_delta_e_uncorrected = analyze_colour_accuracy(
-        sony_img)
+        sony_img, 'Sony a7IV')
     # analyze iPhone img
     iphone_image, iphone_checker_crop, iphone_RGB_reference, iphone_RGB_corrected, iphone_delta_e, iphone_delta_e_uncorrected = analyze_colour_accuracy(
-        iphone_img)
+        iphone_img, 'iPhone 13 Pro Max')
 
     visualize_swatches(sony_image, sony_checker_crop, sony_RGB_reference,
                        sony_RGB_corrected, sony_delta_e)
