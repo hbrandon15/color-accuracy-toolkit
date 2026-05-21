@@ -221,7 +221,7 @@ def compare_cameras(iphone_delta_e, sony_delta_e):
     Compare the results between the Iphone 13 Pro Max and Sony a7IV on a bar chart
     """
     # create the figure
-    fig = plt.subplots(figsize=(16, 6))
+    fig, ax = plt.subplots(figsize=(16, 6))
 
     return None
 
