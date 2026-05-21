@@ -227,14 +227,15 @@ def compare_cameras(iphone_delta_e, sony_delta_e):
     width = .35
 
     ax.bar(x - width/2, sony_delta_e, width, label='Sony a7IV')
-    ax.bar(x + width/2, iphone_delta_e, width, label='iPhone 13 Pro Max') 
+    ax.bar(x + width/2, iphone_delta_e, width, label='iPhone 13 Pro Max')
     ax.legend()
     ax.set_xlabel('Patch')
     ax.set_ylabel('ΔE 2000')
     ax.set_title('Color Accuracy: Sony a7IV vs. iPhone 13 Pro Max')
 
-
-    return None
+    # save file
+    plt.savefig('./comparision.png', dpi=150, bbox_inches='tight')
+    plt.show()
 
 
 if __name__ == '__main__':
