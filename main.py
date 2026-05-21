@@ -239,8 +239,14 @@ def compare_cameras(iphone_delta_e, sony_delta_e):
 
 
 if __name__ == '__main__':
-    image, checker_crop, RGB_reference, RGB_corrected, delta_e_values = analyze_colour_accuracy(
+    # analyze Sony img
+    sony_image, sony_checker_crop, sony_RGB_reference, sony_RGB_corrected, sony_delta_e, sony_delta_e_uncorrected = analyze_colour_accuracy(
         sony_img)
-    visualize_swatches(image, checker_crop, RGB_reference,
-                       RGB_corrected, delta_e_values)
-    plot_gamut(RGB_reference, RGB_corrected)
+    # analyze iPhone img
+    iphone_image, iphone_checker_crop, iphone_RGB_reference, iphone_RGB_corrected, iphone_delta_e, iphone_delta_e_uncorrected = analyze_colour_accuracy(
+        iphone_img)
+
+    visualize_swatches(sony_image, sony_checker_crop, sony_RGB_reference,
+                       sony_RGB_corrected, sony_delta_e)
+    plot_gamut(sony_RGB_reference, sony_RGB_corrected)
+    compare_cameras(iphone_delta_e, sony_delta_e)
