@@ -240,6 +240,7 @@ def compare_cameras(iphone_delta_e, sony_delta_e):
     ax.set_ylabel('ΔE 2000')
     ax.set_title('Color Accuracy: Sony a7IV vs. iPhone 13 Pro Max')
 
+    # TODO : Add x-axis tick labels for patch colors. 
     # save file
     plt.savefig('./comparision.png', dpi=150, bbox_inches='tight')
     plt.show()
