@@ -31,12 +31,15 @@ def detect_patches(file_path):
 
     """
     with rawpy.imread(file_path) as raw:
+        wb = list(raw.daylight_whitebalance)
+        wb[3] = wb[1]
         rgb = raw.postprocess(output_bps=16,  # 16-bit for better precision
                               no_auto_bright=True,
-                              use_camera_wb=True,
+                              use_camera_wb=False,
+                              user_wb =wb, 
                               gamma=(1, 1),  # linear -- no gamma curve applied
                               output_color=rawpy.ColorSpace.sRGB)  # set the output color space
-
+       
     # normalize to 0-1 float
     image = rgb.astype(np.float32) / 65535.0
 
@@ -240,6 +243,8 @@ def compare_cameras(iphone_delta_e, sony_delta_e):
 
 
 if __name__ == '__main__':
+    
+    
     # analyze Sony img
     sony_image, sony_checker_crop, sony_RGB_reference, sony_RGB_corrected, sony_delta_e, sony_delta_e_uncorrected = analyze_colour_accuracy(
         sony_img, 'Sony a7IV')
