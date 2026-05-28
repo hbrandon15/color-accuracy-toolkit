@@ -232,6 +232,9 @@ def compare_cameras(iphone_delta_e, sony_delta_e):
 
     ax.bar(x - width/2, sony_delta_e, width, label='Sony a7IV')
     ax.bar(x + width/2, iphone_delta_e, width, label='iPhone 13 Pro Max')
+    ax.axhline(y = 3, color = 'r', linestyle = '--', label = 'Noticeable (ΔE=3)')
+    ax.axhline(y = 2, color = 'orange', linestyle = '--', label = 'Noticeable but acceptable (ΔE=2)')
+    ax.axhline(y = 1, color = 'g', linestyle = '--', label = 'Imperceptible (ΔE=1)')
     ax.legend()
     ax.set_xlabel('Patch')
     ax.set_ylabel('ΔE 2000')
