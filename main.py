@@ -251,6 +251,10 @@ def compare_cameras(iphone_delta_e: list[float], sony_delta_e: list[float], colo
 
 if __name__ == '__main__':
 
+    # Color patches:
+    colour_checker = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014']
+    color_patches = list(colour_checker.data.keys())
+
     # analyze Sony img
     sony_image, sony_checker_crop, sony_RGB_reference, sony_RGB_corrected, sony_delta_e, sony_delta_e_uncorrected = analyze_colour_accuracy(
         sony_img, 'Sony a7IV')
@@ -261,4 +265,4 @@ if __name__ == '__main__':
     visualize_swatches(sony_image, sony_checker_crop, sony_RGB_reference,
                        sony_RGB_corrected, sony_delta_e)
     plot_gamut(sony_RGB_reference, sony_RGB_corrected)
-    compare_cameras(iphone_delta_e, sony_delta_e)
+    compare_cameras(iphone_delta_e, sony_delta_e, color_patches)
