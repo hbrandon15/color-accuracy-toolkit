@@ -177,6 +177,11 @@ def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_
     axes[1, 0].set_ylabel('Corrected', fontsize=9)
     plt.suptitle('ColorChecker: Reference vs Corrected (ΔE2000)')
     plt.tight_layout()
+
+    # TODO #13: color code delta e numbers
+    # TODO #14: add patch names below swatches
+    # TODO #15: add summary stat for mean delta e
+    # TODO #16: label rows
     plt.savefig('./delta_e_comparison.png', dpi=150, bbox_inches='tight')
     plt.show()
 
@@ -245,7 +250,8 @@ def compare_cameras(iphone_delta_e: list[float], sony_delta_e: list[float], colo
     ax.set_ylabel('ΔE 2000')
     ax.set_title('Color Accuracy: Sony a7IV vs. iPhone 13 Pro Max')
 
-    # TODO : Add x-axis tick labels for patch colors.
+    # TODO #11 create delta e mean annotation per camera
+    # TODO #12 Add winner count subtitle
     # save file
     plt.savefig('./comparision.png', dpi=150, bbox_inches='tight')
     plt.show()
