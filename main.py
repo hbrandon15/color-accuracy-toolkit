@@ -36,10 +36,10 @@ def detect_patches(file_path):
         rgb = raw.postprocess(output_bps=16,  # 16-bit for better precision
                               no_auto_bright=True,
                               use_camera_wb=False,
-                              user_wb =wb, 
+                              user_wb=wb,
                               gamma=(1, 1),  # linear -- no gamma curve applied
                               output_color=rawpy.ColorSpace.sRGB)  # set the output color space
-       
+
     # normalize to 0-1 float
     image = rgb.astype(np.float32) / 65535.0
 
@@ -220,7 +220,7 @@ def plot_gamut(RGB_reference, RGB_corrected):
     plt.show()
 
 
-def compare_cameras(iphone_delta_e: list[float], sony_delta_e: list[float], color_patches: list[str]):
+def compare_cameras(iphone_delta_e: list[float], sony_delta_e: list[float], color_patches: list[str]) -> None:
     """
     Compare the results between the Iphone 13 Pro Max and Sony a7IV on a bar chart
     """
@@ -230,25 +230,27 @@ def compare_cameras(iphone_delta_e: list[float], sony_delta_e: list[float], colo
     x = np.arange(24)
     width = .35
 
-    ax.bar(x - width/2, sony_delta_e, width, color = 'steelblue', label='Sony a7IV')
-    ax.bar(x + width/2, iphone_delta_e, width,  color = 'dimgray', label='iPhone 13 Pro Max')
-    ax.axhline(y = 3, color = 'r', linestyle = '--', label = 'Noticeable (ΔE=3)')
-    ax.axhline(y = 2, color = 'orange', linestyle = '--', label = 'Noticeable but acceptable (ΔE=2)')
-    ax.axhline(y = 1, color = 'g', linestyle = '--', label = 'Imperceptible (ΔE=1)')
+    ax.bar(x - width/2, sony_delta_e, width,
+           color='steelblue', label='Sony a7IV')
+    ax.bar(x + width/2, iphone_delta_e, width,
+           color='dimgray', label='iPhone 13 Pro Max')
+    ax.axhline(y=3, color='r', linestyle='--', label='Noticeable (ΔE=3)')
+    ax.axhline(y=2, color='orange', linestyle='--',
+               label='Noticeable but acceptable (ΔE=2)')
+    ax.axhline(y=1, color='g', linestyle='--', label='Imperceptible (ΔE=1)')
     ax.legend()
     ax.set_xlabel('Patch')
     ax.set_ylabel('ΔE 2000')
     ax.set_title('Color Accuracy: Sony a7IV vs. iPhone 13 Pro Max')
 
-    # TODO : Add x-axis tick labels for patch colors. 
+    # TODO : Add x-axis tick labels for patch colors.
     # save file
     plt.savefig('./comparision.png', dpi=150, bbox_inches='tight')
     plt.show()
 
 
 if __name__ == '__main__':
-    
-    
+
     # analyze Sony img
     sony_image, sony_checker_crop, sony_RGB_reference, sony_RGB_corrected, sony_delta_e, sony_delta_e_uncorrected = analyze_colour_accuracy(
         sony_img, 'Sony a7IV')
