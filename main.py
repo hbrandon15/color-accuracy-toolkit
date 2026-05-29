@@ -228,6 +228,8 @@ def compare_cameras(iphone_delta_e: list[float], sony_delta_e: list[float], colo
     fig, ax = plt.subplots(figsize=(16, 6))
 
     x = np.arange(24)
+    ax.set_xticks(x)
+    ax.set_xticklabels( color_patches, rotation=45, ha='right',)
     width = .35
 
     ax.bar(x - width/2, sony_delta_e, width,
