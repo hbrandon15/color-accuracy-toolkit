@@ -6,6 +6,7 @@ import colour
 
 
 sony_img = "./imgs/AKG07755.ARW"
+iphone_img = "./imgs/IMG_2188.DNG"
 
 
 def display_arw_image(file_path):
@@ -30,9 +31,12 @@ def detect_patches(file_path):
 
     """
     with rawpy.imread(file_path) as raw:
+        wb = list(raw.daylight_whitebalance)
+        wb[3] = wb[1]
         rgb = raw.postprocess(output_bps=16,  # 16-bit for better precision
                               no_auto_bright=True,
-                              use_camera_wb=True,
+                              use_camera_wb=False,
+                              user_wb=wb,
                               gamma=(1, 1),  # linear -- no gamma curve applied
                               output_color=rawpy.ColorSpace.sRGB)  # set the output color space
 
@@ -82,7 +86,7 @@ def compute_colour_correction_matrix(measured, reference):
     return ccm
 
 
-def analyze_colour_accuracy(file_path):
+def analyze_colour_accuracy(file_path, label):
     """
 
     The goal is to get the measured color swatch data and our RGB reference data into the same color space in order to compute the CCM. The we will all working colorspaces to LAB to compute the ΔE2000 analysis.
@@ -122,6 +126,7 @@ def analyze_colour_accuracy(file_path):
     delta_e_uncorrected_values = colour.delta_E(
         Lab_uncorrected, Lab_reference, method='CIE 2000')
 
+    print(f"\n{label}")
     print(f"\n{'patch':<8} {'uncorrected':>12} {'corrected':>12} {'improvement':>12}")
     print("-" * 48)
     for i, (u, c) in enumerate(zip(delta_e_uncorrected_values, delta_e_values)):
@@ -130,7 +135,7 @@ def analyze_colour_accuracy(file_path):
     print(f"{'mean':<8} {delta_e_uncorrected_values.mean():>12.4f} {delta_e_values.mean():>12.4f} {delta_e_uncorrected_values.mean() - delta_e_values.mean():>+12.4f}")
     print(f"{'max':<8} {delta_e_uncorrected_values.max():>12.4f} {delta_e_values.max():>12.4f}")
 
-    return image, checker_crop, RGB_reference, RGB_corrected, delta_e_values
+    return image, checker_crop, RGB_reference, RGB_corrected, delta_e_values, delta_e_uncorrected_values
 
 
 def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_e):
@@ -209,15 +214,57 @@ def plot_gamut(RGB_reference, RGB_corrected):
                     xy=RGB_corrected_xy[i],       # arrow tip
                     xytext=RGB_reference_xy[i],   # arrow tail
                     arrowprops=dict(arrowstyle='->', color='white', lw=0.8))
-        
+
     # save file
     plt.savefig('./gamut_plot.png', dpi=150, bbox_inches='tight')
     plt.show()
 
 
+def compare_cameras(iphone_delta_e: list[float], sony_delta_e: list[float], color_patches: list[str]) -> None:
+    """
+    Compare the results between the Iphone 13 Pro Max and Sony a7IV on a bar chart
+    """
+    # create the figure
+    fig, ax = plt.subplots(figsize=(16, 6))
+
+    x = np.arange(24)
+    ax.set_xticks(x)
+    ax.set_xticklabels( color_patches, rotation=45, ha='right',)
+    width = .35
+
+    ax.bar(x - width/2, sony_delta_e, width,
+           color='steelblue', label='Sony a7IV')
+    ax.bar(x + width/2, iphone_delta_e, width,
+           color='dimgray', label='iPhone 13 Pro Max')
+    ax.axhline(y=3, color='r', linestyle='--', label='Noticeable (ΔE=3)')
+    ax.axhline(y=2, color='orange', linestyle='--',
+               label='Noticeable but acceptable (ΔE=2)')
+    ax.axhline(y=1, color='g', linestyle='--', label='Imperceptible (ΔE=1)')
+    ax.legend()
+    ax.set_xlabel('Patch')
+    ax.set_ylabel('ΔE 2000')
+    ax.set_title('Color Accuracy: Sony a7IV vs. iPhone 13 Pro Max')
+
+    # TODO : Add x-axis tick labels for patch colors.
+    # save file
+    plt.savefig('./comparision.png', dpi=150, bbox_inches='tight')
+    plt.show()
+
+
 if __name__ == '__main__':
-    image, checker_crop, RGB_reference, RGB_corrected, delta_e_values = analyze_colour_accuracy(
-        sony_img)
-    visualize_swatches(image, checker_crop, RGB_reference,
-                       RGB_corrected, delta_e_values)
-    plot_gamut(RGB_reference, RGB_corrected)
+
+    # Color patches:
+    colour_checker = colour.CCS_COLOURCHECKERS['ColorChecker24 - After November 2014']
+    color_patches = list(colour_checker.data.keys())
+
+    # analyze Sony img
+    sony_image, sony_checker_crop, sony_RGB_reference, sony_RGB_corrected, sony_delta_e, sony_delta_e_uncorrected = analyze_colour_accuracy(
+        sony_img, 'Sony a7IV')
+    # analyze iPhone img
+    iphone_image, iphone_checker_crop, iphone_RGB_reference, iphone_RGB_corrected, iphone_delta_e, iphone_delta_e_uncorrected = analyze_colour_accuracy(
+        iphone_img, 'iPhone 13 Pro Max')
+
+    visualize_swatches(sony_image, sony_checker_crop, sony_RGB_reference,
+                       sony_RGB_corrected, sony_delta_e)
+    plot_gamut(sony_RGB_reference, sony_RGB_corrected)
+    compare_cameras(iphone_delta_e, sony_delta_e, color_patches)
