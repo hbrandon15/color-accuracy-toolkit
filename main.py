@@ -39,7 +39,7 @@ def detect_patches(file_path):
                               use_camera_wb=False,
                               user_wb=wb,
                               gamma=(1, 1),  # linear -- no gamma curve applied
-                              output_color=rawpy.ColorSpace.sRGB)  # set the output color space
+                              output_color=rawpy.ColorSpace.sRGB)  # set the output color space # type: ignore
 
     # normalize to 0-1 float
     image = rgb.astype(np.float32) / 65535.0
