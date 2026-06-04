@@ -183,7 +183,6 @@ def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_
     plt.suptitle('ColorChecker: Reference vs Corrected (ΔE2000)')
     plt.tight_layout()
 
-    # TODO #14: add patch names below swatches
     # TODO #15: add summary stat for mean delta e
     # TODO #16: label rows
     plt.savefig('./delta_e_comparison.png', dpi=150, bbox_inches='tight')
