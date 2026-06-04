@@ -138,7 +138,7 @@ def analyze_colour_accuracy(file_path, label):
     return image, checker_crop, RGB_reference, RGB_corrected, delta_e_values, delta_e_uncorrected_values
 
 
-def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_e):
+def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_e, color_patches):
     """
 
     Before we can visualize, we need to understand our RGB data is LINEAR. We will need to apply gamma encoding before display so the colors look correct visually.
@@ -172,6 +172,9 @@ def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_
         axes[1, i].axis('off')
         color = 'green' if delta_e[i] <= 1 else 'orange' if delta_e[i] <= 3 else 'red'
         axes[1, i].set_title(f"{delta_e[i]:.1f}", fontsize=10, color=color, fontweight='bold')
+        axes[1, i].text(0.5, -0.1, color_patches[i], transform=axes[1, i].transAxes,
+                        fontsize=6, rotation=45, ha='right', va='top')
+
 
 
     # label the rows and show
@@ -272,6 +275,6 @@ if __name__ == '__main__':
         iphone_img, 'iPhone 13 Pro Max')
 
     visualize_swatches(sony_image, sony_checker_crop, sony_RGB_reference,
-                       sony_RGB_corrected, sony_delta_e)
+                       sony_RGB_corrected, sony_delta_e, color_patches)
     plot_gamut(sony_RGB_reference, sony_RGB_corrected)
     compare_cameras(iphone_delta_e, sony_delta_e, color_patches)
