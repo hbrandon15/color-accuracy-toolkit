@@ -1,6 +1,7 @@
 import numpy as np
 import rawpy
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import colour_checker_detection as ccd
 import colour
 
@@ -38,7 +39,7 @@ def detect_patches(file_path):
                               use_camera_wb=False,
                               user_wb=wb,
                               gamma=(1, 1),  # linear -- no gamma curve applied
-                              output_color=rawpy.ColorSpace.sRGB)  # set the output color space
+                              output_color=rawpy.ColorSpace.sRGB)  # set the output color space # type: ignore
 
     # normalize to 0-1 float
     image = rgb.astype(np.float32) / 65535.0
@@ -138,7 +139,7 @@ def analyze_colour_accuracy(file_path, label):
     return image, checker_crop, RGB_reference, RGB_corrected, delta_e_values, delta_e_uncorrected_values
 
 
-def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_e):
+def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_e, color_patches):
     """
 
     Before we can visualize, we need to understand our RGB data is LINEAR. We will need to apply gamma encoding before display so the colors look correct visually.
@@ -170,18 +171,26 @@ def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_
         axes[1, i].imshow([[RGB_corrected_with_gamma[i]]])
         axes[0, i].axis('off')
         axes[1, i].axis('off')
-        axes[1, i].set_title(f"{delta_e[i]:.1f}", fontsize=7)
+        color = 'green' if delta_e[i] <= 1 else 'orange' if delta_e[i] <= 3 else 'red'
+        axes[1, i].set_title(f"{delta_e[i]:.1f}", fontsize=10, color=color, fontweight='bold')
+        axes[1, i].text(0.5, -0.1, color_patches[i], transform=axes[1, i].transAxes,
+                        fontsize=6, rotation=45, ha='right', va='top')
+
+
 
     # label the rows and show
-    axes[0, 0].set_ylabel('Reference', fontsize=9)
-    axes[1, 0].set_ylabel('Corrected', fontsize=9)
+    axes[0, 0].text(-0.5, 0.5, 'Reference', transform=axes[0, 0].transAxes, fontsize=9, ha='right')
+    axes[1, 0].text(-0.5, 0.5,'Corrected', transform=axes[1, 0].transAxes, fontsize=9, ha='right')
     plt.suptitle('ColorChecker: Reference vs Corrected (ΔE2000)')
     plt.tight_layout()
 
-    # TODO #13: color code delta e numbers
-    # TODO #14: add patch names below swatches
-    # TODO #15: add summary stat for mean delta e
-    # TODO #16: label rows
+    green_patch = mpatches.Patch(color='green', label='≤1: Imperceptible')
+    orange_patch = mpatches.Patch(color='orange', label='≤3: Acceptable')
+    red_patch = mpatches.Patch(color='red', label='>3: Noticeable')
+    fig.legend(handles=[green_patch, orange_patch, red_patch],
+               title=f"Mean ΔE: {delta_e.mean():.2f}",
+               loc='upper right', fontsize=8)
+    
     plt.savefig('./delta_e_comparison.png', dpi=150, bbox_inches='tight')
     plt.show()
 
@@ -225,7 +234,7 @@ def plot_gamut(RGB_reference, RGB_corrected):
     plt.show()
 
 
-def compare_cameras(iphone_delta_e: list[float], sony_delta_e: list[float], color_patches: list[str]) -> None:
+def compare_cameras(iphone_delta_e: np.ndarray, sony_delta_e: np.ndarray, color_patches: list[str]) -> None:
     """
     Compare the results between the Iphone 13 Pro Max and Sony a7IV on a bar chart
     """
@@ -271,6 +280,6 @@ if __name__ == '__main__':
         iphone_img, 'iPhone 13 Pro Max')
 
     visualize_swatches(sony_image, sony_checker_crop, sony_RGB_reference,
-                       sony_RGB_corrected, sony_delta_e)
+                       sony_RGB_corrected, sony_delta_e, color_patches)
     plot_gamut(sony_RGB_reference, sony_RGB_corrected)
     compare_cameras(iphone_delta_e, sony_delta_e, color_patches)
