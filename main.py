@@ -190,7 +190,7 @@ def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_
     fig.legend(handles=[green_patch, orange_patch, red_patch],
                title=f"Mean ΔE: {delta_e.mean():.2f}",
                loc='upper right', fontsize=8)
-    # TODO #16: label rows
+    
     plt.savefig('./delta_e_comparison.png', dpi=150, bbox_inches='tight')
     plt.show()
 
