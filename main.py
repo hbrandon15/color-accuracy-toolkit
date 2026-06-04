@@ -171,7 +171,7 @@ def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_
         axes[0, i].axis('off')
         axes[1, i].axis('off')
         color = 'green' if delta_e[i] <= 1 else 'orange' if delta_e[i] <= 3 else 'red'
-        axes[1, i].set_title(f"{delta_e[i]:.1f}", fontsize=7, color=color)
+        axes[1, i].set_title(f"{delta_e[i]:.1f}", fontsize=10, color=color, fontweight='bold')
 
 
     # label the rows and show
@@ -180,7 +180,6 @@ def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_
     plt.suptitle('ColorChecker: Reference vs Corrected (ΔE2000)')
     plt.tight_layout()
 
-    # TODO #13: color code delta e numbers
     # TODO #14: add patch names below swatches
     # TODO #15: add summary stat for mean delta e
     # TODO #16: label rows
