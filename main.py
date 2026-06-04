@@ -170,7 +170,9 @@ def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_
         axes[1, i].imshow([[RGB_corrected_with_gamma[i]]])
         axes[0, i].axis('off')
         axes[1, i].axis('off')
-        axes[1, i].set_title(f"{delta_e[i]:.1f}", fontsize=7)
+        color = 'green' if delta_e[i] <= 1 else 'orange' if delta_e[i] <= 3 else 'red'
+        axes[1, i].set_title(f"{delta_e[i]:.1f}", fontsize=7, color=color)
+
 
     # label the rows and show
     axes[0, 0].set_ylabel('Reference', fontsize=9)
