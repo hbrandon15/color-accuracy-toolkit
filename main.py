@@ -179,8 +179,8 @@ def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_
 
 
     # label the rows and show
-    axes[0, 0].set_ylabel('Reference', fontsize=9)
-    axes[1, 0].set_ylabel('Corrected', fontsize=9)
+    axes[0, 0].text(-0.5, 0.5, 'Reference', transform=axes[0, 0].transAxes, fontsize=9, ha='right')
+    axes[1, 0].text(-0.5, 0.5,'Corrected', transform=axes[1, 0].transAxes, fontsize=9, ha='right')
     plt.suptitle('ColorChecker: Reference vs Corrected (ΔE2000)')
     plt.tight_layout()
 
