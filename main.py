@@ -1,6 +1,7 @@
 import numpy as np
 import rawpy
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import colour_checker_detection as ccd
 import colour
 
@@ -183,7 +184,12 @@ def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_
     plt.suptitle('ColorChecker: Reference vs Corrected (ΔE2000)')
     plt.tight_layout()
 
-    # TODO #15: add summary stat for mean delta e
+    green_patch = mpatches.Patch(color='green', label='≤1: Imperceptible')
+    orange_patch = mpatches.Patch(color='orange', label='≤3: Acceptable')
+    red_patch = mpatches.Patch(color='red', label='>3: Noticeable')
+    fig.legend(handles=[green_patch, orange_patch, red_patch],
+               title=f"Mean ΔE: {delta_e.mean():.2f}",
+               loc='upper right', fontsize=8)
     # TODO #16: label rows
     plt.savefig('./delta_e_comparison.png', dpi=150, bbox_inches='tight')
     plt.show()
