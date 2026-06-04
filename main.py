@@ -234,7 +234,7 @@ def plot_gamut(RGB_reference, RGB_corrected):
     plt.show()
 
 
-def compare_cameras(iphone_delta_e: list[float], sony_delta_e: list[float], color_patches: list[str]) -> None:
+def compare_cameras(iphone_delta_e: np.ndarray, sony_delta_e: np.ndarray, color_patches: list[str]) -> None:
     """
     Compare the results between the Iphone 13 Pro Max and Sony a7IV on a bar chart
     """
