@@ -56,13 +56,15 @@ RAW Ingest → Patch Extraction → CCM Computation → ΔE2000 Analysis → Gam
 ### Prerequisites
 
 ```bash
-pip install rawpy numpy colormath matplotlib
+pip install rawpy numpy colour-science matplotlib colour-checker-detection
 ```
 
 ### Usage
 
+Place your RAW files in the `imgs/` directory and update the file paths at the top of `main.py`, then run:
+
 ```bash
-python run_pipeline.py --input your_image.ARW
+python main.py
 ```
 
 ---
