@@ -241,6 +241,10 @@ def compare_cameras(iphone_delta_e: np.ndarray, sony_delta_e: np.ndarray, color_
     # create the figure
     fig, ax = plt.subplots(figsize=(16, 6))
 
+    sony_mean = sony_delta_e.mean()
+    iphone_mean = iphone_delta_e.mean()
+
+
     x = np.arange(24)
     ax.set_xticks(x)
     ax.set_xticklabels( color_patches, rotation=45, ha='right',)
@@ -255,12 +259,17 @@ def compare_cameras(iphone_delta_e: np.ndarray, sony_delta_e: np.ndarray, color_
                label='Noticeable but acceptable (ΔE=2)')
     ax.axhline(y=1, color='g', linestyle='--', label='Imperceptible (ΔE=1)')
     ax.legend()
+    ax.text(0.01, 0.97, f"Sony Mean ΔE: {sony_mean:.2f}", transform=ax.transAxes)
+    ax.text(0.01, 0.92, f"iPhone Mean ΔE: {iphone_mean:.2f}", transform=ax.transAxes)
+
+    sony_wins = np.sum(sony_delta_e < iphone_delta_e)
+    iphone_wins = np.sum(iphone_delta_e < sony_delta_e)
+
+
     ax.set_xlabel('Patch')
     ax.set_ylabel('ΔE 2000')
-    ax.set_title('Color Accuracy: Sony a7IV vs. iPhone 13 Pro Max')
+    ax.set_title(f'Color Accuracy: Sony a7IV vs. iPhone 13 Pro Max\nSony won {sony_wins}/24 patches | iPhone won {iphone_wins}/24 patches')
 
-    # TODO #11 create delta e mean annotation per camera
-    # TODO #12 Add winner count subtitle
     # save file
     plt.savefig('./comparision.png', dpi=150, bbox_inches='tight')
     plt.show()
