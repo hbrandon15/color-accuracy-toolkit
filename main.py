@@ -268,9 +268,8 @@ def compare_cameras(iphone_delta_e: np.ndarray, sony_delta_e: np.ndarray, color_
 
     ax.set_xlabel('Patch')
     ax.set_ylabel('ΔE 2000')
-    ax.set_title('Color Accuracy: Sony a7IV vs. iPhone 13 Pro Max')
+    ax.set_title(f'Color Accuracy: Sony a7IV vs. iPhone 13 Pro Max\nSony won {sony_wins}/24 patches | iPhone won {iphone_wins}/24 patches')
 
-    # TODO #12 Add winner count subtitle
     # save file
     plt.savefig('./comparision.png', dpi=150, bbox_inches='tight')
     plt.show()
