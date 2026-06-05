@@ -262,6 +262,10 @@ def compare_cameras(iphone_delta_e: np.ndarray, sony_delta_e: np.ndarray, color_
     ax.text(0.01, 0.97, f"Sony Mean ΔE: {sony_mean:.2f}", transform=ax.transAxes)
     ax.text(0.01, 0.92, f"iPhone Mean ΔE: {iphone_mean:.2f}", transform=ax.transAxes)
 
+    sony_wins = np.sum(sony_delta_e < iphone_delta_e)
+    iphone_wins = np.sum(iphone_delta_e < sony_delta_e)
+
+
     ax.set_xlabel('Patch')
     ax.set_ylabel('ΔE 2000')
     ax.set_title('Color Accuracy: Sony a7IV vs. iPhone 13 Pro Max')
