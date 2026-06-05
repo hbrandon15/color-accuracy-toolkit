@@ -27,7 +27,7 @@ RAW Ingest → Patch Extraction → CCM Computation → ΔE2000 Analysis → Gam
 |---|---|
 | `rawpy` | RAW ingest — demosaic + white balance metadata |
 | `numpy` | CCM least-squares computation |
-| `colormath` | Lab conversion and ΔE2000 calculation |
+| `colour-science` | Lab conversion, ΔE2000 calculation, and CCM reference data |
 | `matplotlib` | Patch visualization, gamut plot, report figures |
 
 ---
