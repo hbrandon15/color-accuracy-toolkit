@@ -181,7 +181,7 @@ def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_
     # label the rows and show
     axes[0, 0].text(-0.5, 0.5, 'Reference', transform=axes[0, 0].transAxes, fontsize=9, ha='right')
     axes[1, 0].text(-0.5, 0.5,'Corrected', transform=axes[1, 0].transAxes, fontsize=9, ha='right')
-    plt.suptitle('ColorChecker: Reference vs Corrected (ΔE2000)')
+    plt.suptitle('ColorChecker: Reference vs Corrected (ΔE2000) — Sony a7IV')
     plt.tight_layout()
 
     green_patch = mpatches.Patch(color='green', label='≤1: Imperceptible')
@@ -191,7 +191,7 @@ def visualize_swatches(image, checker_crop, RGB_reference, RGB_corrected, delta_
                title=f"Mean ΔE: {delta_e.mean():.2f}",
                loc='upper right', fontsize=8)
     
-    plt.savefig('./delta_e_comparison.png', dpi=150, bbox_inches='tight')
+    plt.savefig('./sony_delta_e_comparison.png', dpi=150, bbox_inches='tight')
     plt.show()
 
 
@@ -222,6 +222,7 @@ def plot_gamut(RGB_reference, RGB_corrected):
     ax.scatter(RGB_corrected_xy[:, 0],
                RGB_corrected_xy[:, 1], label='Corrected')
     ax.legend()
+    ax.set_title('CIE xy Chromaticity — Sony a7IV Gamut vs. sRGB')
 
     for i in range(len(RGB_reference_xy)):
         ax.annotate('',
@@ -230,7 +231,7 @@ def plot_gamut(RGB_reference, RGB_corrected):
                     arrowprops=dict(arrowstyle='->', color='white', lw=0.8))
 
     # save file
-    plt.savefig('./gamut_plot.png', dpi=150, bbox_inches='tight')
+    plt.savefig('./sony_gamut_plot.png', dpi=150, bbox_inches='tight')
     plt.show()
 
 
